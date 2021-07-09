@@ -1,0 +1,47 @@
+<!-- Netlify CMS -->
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Content Manager (Netlify CMS)</title>
+    <link rel="stylesheet" href="https://unpkg.com/netlify-cms@latest/dist/cms.css" />
+    <meta name="generator" content="Cecil 5.56.1" />
+  </head>
+  <body>
+    <script src="https://unpkg.com/netlify-cms@latest/dist/netlify-cms.js"></script>
+    <script src="https://identity-js.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+      // Identity
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', user => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+        window.netlifyIdentity.on('logout', () => {
+          document.location.href = '/';
+        });
+      }
+      // Preview: Style
+      //CMS.registerPreviewStyle('/css/style.css');
+      // Preview: Templates
+      var Episode = createClass({
+        render: function() {
+          var entry = this.props.entry;
+          return h('div', {},
+            h('h1', {}, entry.getIn(['data', 'title'])),
+            h('div', {}, entry.getIn(['data', 'date'])),
+            h('div', {"className": "text"}, this.props.widgetFor('body')),
+            h('div', {},
+              h('audio', {controls: "controls", "src": entry.getIn(['data', 'episode', 'file'])}),
+            )
+          );
+        }
+      });
+      CMS.registerPreviewTemplate("episodes", Episode);
+    </script>
+  </body>
+</html>
